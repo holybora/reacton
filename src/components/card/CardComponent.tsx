@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { ModelResponse, Provider } from "@/lib/types";
+import { useState, useEffect } from "react";
+import { ModelResponse, Provider, TokenStatus } from "@/lib/types";
 import { MODELS_BY_PROVIDER, getModelById } from "@/lib/models";
 import { PROVIDER_COLORS } from "@/lib/constants";
+import { useTokenValidation } from "@/hooks/useTokenValidation";
 import ModelSelector from "./ModelSelector";
 import ApiTokenInput from "./ApiTokenInput";
 import ResponsePreview from "./ResponsePreview";
@@ -15,6 +16,7 @@ export interface CardComponentProps {
   response: ModelResponse | null;
   onModelChange?: (modelId: string) => void;
   onTokenChange?: (token: string) => void;
+  onTokenStatusChange?: (status: TokenStatus) => void;
 }
 
 export default function CardComponent({
@@ -23,12 +25,19 @@ export default function CardComponent({
   response,
   onModelChange,
   onTokenChange,
+  onTokenStatusChange,
 }: CardComponentProps) {
   const models = MODELS_BY_PROVIDER[provider];
   const [selectedModelId, setSelectedModelId] = useState<string>(
     defaultModelId ?? models[0].id
   );
   const [apiToken, setApiToken] = useState<string>("");
+
+  const tokenStatus = useTokenValidation(provider, apiToken);
+
+  useEffect(() => {
+    onTokenStatusChange?.(tokenStatus);
+  }, [tokenStatus, onTokenStatusChange]);
 
   const selectedModel = getModelById(selectedModelId);
   const colors = PROVIDER_COLORS[provider];
@@ -64,7 +73,11 @@ export default function CardComponent({
           selectedModelId={selectedModelId}
           onChange={handleModelChange}
         />
-        <ApiTokenInput value={apiToken} onChange={handleTokenChange} />
+        <ApiTokenInput
+          value={apiToken}
+          onChange={handleTokenChange}
+          tokenStatus={tokenStatus}
+        />
       </div>
 
       {/* Response preview */}
@@ -72,8 +85,18 @@ export default function CardComponent({
         <ResponsePreview
           content={response?.content ?? null}
           isLoading={response?.status === "loading"}
+          error={response?.error ?? null}
         />
       </div>
+
+      {/* Latency display */}
+      {response?.status === "success" && response.latencyMs > 0 && (
+        <div className="px-4 pb-2">
+          <span className="text-xs text-gray-500">
+            {(response.latencyMs / 1000).toFixed(1)}s
+          </span>
+        </div>
+      )}
 
       {/* Expandable raw output */}
       <ExpandableOutput content={response?.content ?? null} />

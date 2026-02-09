@@ -39,3 +39,36 @@ export interface ComparisonResult {
   /** When the comparison was initiated (Date.now()) */
   timestamp: number;
 }
+
+/** Token validation status for the UI */
+export type TokenStatus = "idle" | "validating" | "valid" | "invalid";
+
+/** Request body for POST /api/validate-token */
+export interface ValidateTokenRequest {
+  provider: Provider;
+  token: string;
+}
+
+/** Response from POST /api/validate-token */
+export interface ValidateTokenResponse {
+  valid: boolean;
+  error?: string;
+}
+
+/** A single model call request within a comparison */
+export interface ModelCallRequest {
+  provider: Provider;
+  modelId: string;
+  token: string;
+}
+
+/** Request body for POST /api/compare */
+export interface CompareRequest {
+  prompt: string;
+  models: ModelCallRequest[];
+}
+
+/** Response from POST /api/compare */
+export interface CompareResponse {
+  responses: ModelResponse[];
+}
