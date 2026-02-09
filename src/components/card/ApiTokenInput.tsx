@@ -1,13 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import type { TokenStatus } from "@/lib/types";
 
 interface ApiTokenInputProps {
   value: string;
   onChange: (token: string) => void;
+  tokenStatus: TokenStatus;
 }
 
-export default function ApiTokenInput({ value, onChange }: ApiTokenInputProps) {
+const BORDER_CLASSES: Record<TokenStatus, string> = {
+  idle: "border-gray-700 focus:border-blue-500 focus:ring-blue-500",
+  validating: "border-yellow-500/50 focus:border-yellow-500 focus:ring-yellow-500",
+  valid: "border-green-500 focus:border-green-400 focus:ring-green-400",
+  invalid: "border-red-500 focus:border-red-400 focus:ring-red-400",
+};
+
+export default function ApiTokenInput({
+  value,
+  onChange,
+  tokenStatus,
+}: ApiTokenInputProps) {
   const [showToken, setShowToken] = useState(false);
 
   return (
@@ -20,7 +33,7 @@ export default function ApiTokenInput({ value, onChange }: ApiTokenInputProps) {
           onChange={(e) => onChange(e.target.value)}
           placeholder="Enter API token"
           autoComplete="off"
-          className="w-full bg-gray-800 text-gray-200 border border-gray-700 rounded-lg px-3 py-2 pr-10 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className={`w-full bg-gray-800 text-gray-200 border rounded-lg px-3 py-2 pr-10 text-sm outline-none focus:ring-1 transition-colors ${BORDER_CLASSES[tokenStatus]}`}
         />
         <button
           type="button"
@@ -62,6 +75,15 @@ export default function ApiTokenInput({ value, onChange }: ApiTokenInputProps) {
           )}
         </button>
       </div>
+      {tokenStatus === "validating" && (
+        <p className="text-xs text-yellow-500 mt-1">Validating...</p>
+      )}
+      {tokenStatus === "valid" && (
+        <p className="text-xs text-green-400 mt-1">Token valid</p>
+      )}
+      {tokenStatus === "invalid" && (
+        <p className="text-xs text-red-400 mt-1">Invalid token</p>
+      )}
     </div>
   );
 }
