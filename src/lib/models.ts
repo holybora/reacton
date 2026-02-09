@@ -2,15 +2,25 @@ import { ModelConfig } from "./types";
 
 export const AVAILABLE_MODELS: ModelConfig[] = [
   // OpenAI
-  { id: "gpt-4o", name: "GPT-4o", provider: "openai", enabled: true },
-  { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "openai", enabled: false },
+  { id: "gpt-5.2", name: "GPT-5.2", provider: "openai", enabled: true },
+  { id: "gpt-5", name: "GPT-5", provider: "openai", enabled: false },
+  { id: "gpt-5-mini", name: "GPT-5 Mini", provider: "openai", enabled: false },
+  { id: "o3", name: "O3", provider: "openai", enabled: false },
+  { id: "o4-mini", name: "O4 Mini", provider: "openai", enabled: false },
 
   // Anthropic
-  { id: "claude-sonnet-4-5-20250514", name: "Claude Sonnet 4.5", provider: "anthropic", enabled: true },
-  { id: "claude-haiku-3-5-20241022", name: "Claude Haiku 3.5", provider: "anthropic", enabled: false },
+  { id: "claude-opus-4-6", name: "Claude Opus 4.6", provider: "anthropic", enabled: true },
+  { id: "claude-sonnet-4-5-20250929", name: "Claude Sonnet 4.5", provider: "anthropic", enabled: false },
+  { id: "claude-haiku-4-5-20251001", name: "Claude Haiku 4.5", provider: "anthropic", enabled: false },
+  { id: "claude-opus-4-5-20251101", name: "Claude Opus 4.5", provider: "anthropic", enabled: false },
+  { id: "claude-sonnet-4-20250514", name: "Claude Sonnet 4", provider: "anthropic", enabled: false },
 
   // Google
-  { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash", provider: "google", enabled: true },
+  { id: "gemini-3-pro-preview", name: "Gemini 3 Pro", provider: "google", enabled: true },
+  { id: "gemini-3-flash-preview", name: "Gemini 3 Flash", provider: "google", enabled: false },
+  { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", provider: "google", enabled: false },
+  { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", provider: "google", enabled: false },
+  { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite", provider: "google", enabled: false },
 ];
 
 /**
